@@ -14,19 +14,66 @@
 // The number of calls to schedule and findAvailableSlots will not exceed 104.
 
 function createMeetingScheduler() {
-    let meetings = []; // Closure to store meetings
+  let meetings = []; // Closure to store meetings
 
-    function schedule(start, end) {
-        // CODE HERE
+  function schedule(start, end) {
+    // If case : when meetings length is 0 meaning all schedule is just available. So, just push the schedule
+    if (meetings.length === 0) {
+      meetings.push([start, end]);
+      return true;
+    } else {
+      // Starting schedule edge case
+      if (end <= meetings[0][0]) {
+        meetings.unshift([start, end]);
+        return true;
+      } else if (start >= meetings[meetings.length - 1][1]) {
+        // Last schedule edge case
+        meetings.push([start, end]);
+        return true;
+      }
+
+      // Between schedule cases
+      for (let i = 0; i < meetings.length - 1; i++) {
+        if (start >= meetings[i][1] && end <= meetings[i+1][0]) {
+          meetings.splice(i+1, 0, [start, end]);
+          return true;
+        }
+      }
     }
 
-    function findAvailableSlots(duration, start, end) {
-        const availableSlots = [];
-        // CODE HERE
-        return availableSlots;
+    // No condition met
+    return false;
+  }
+
+  function findAvailableSlots(duration, start, end) {
+    const availableSlots = [];
+
+    // If case : when meetings length is 0 meaning all schedule is available. So, just push the whole duration
+    if (meetings.length === 0) {
+      availableSlots.push([start, end]);
+    } else {
+      // Starting day case
+      if (meetings[0][0] - start >= duration) {
+        availableSlots.push([start, meetings[0][0]]);
+      }
+
+      // Between schedule case
+      for (let i = 0; i < meetings.length - 1; i++) {
+        if (meetings[i+1][0] - meetings[i][1] >= duration) {
+          availableSlots.push([meetings[i][1], meetings[i+1][0]]);
+        }
+      }
+
+      // Ending day case
+      if (end - meetings[meetings.length - 1][1] >= duration) {
+        availableSlots.push([meetings[meetings.length - 1][1], end]);
+      }
     }
 
-    return { schedule, findAvailableSlots };
+    return availableSlots;
+  }
+
+  return { schedule, findAvailableSlots };
 }
 
 const scheduler = createMeetingScheduler();
