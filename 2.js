@@ -14,7 +14,7 @@
 // The original array should not be modified.
 
 
-const numbers = [1, 2, 3, 4, 5, 6];
+const numbers = [1, 2, 3, 4, 5];
 const isEven = (element) => element % 2 === 0;
 
 function customFilter(array, callback) {
