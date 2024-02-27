@@ -14,11 +14,19 @@
 // The original array should not be modified.
 
 
-const numbers = [1, 2, 3, 4, 5];
+const numbers = [1, 2, 3, 4, 5, 6];
 const isEven = (element) => element % 2 === 0;
 
 function customFilter(array, callback) {
     //CODE HERE
+    let i;
+    filteredArray = new Array();
+    for (i = 0; i < array.length; i++) {
+        if (callback(array[i])) {
+            filteredArray.push(array[i])
+        }
+    }
+    return filteredArray;
 }
 
 const filteredNumbers = customFilter(numbers, isEven);
